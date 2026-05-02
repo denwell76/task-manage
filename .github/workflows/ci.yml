@@ -1,0 +1,40 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install --workspaces --legacy-peer-deps
+
+      - name: Build backend
+        run: npm run build:backend
+
+      - name: Lint backend
+        run: npm run lint:backend
+
+      - name: Lint frontend
+        run: npm run lint:frontend
+
+      - name: Test backend
+        run: npm run test:backend
+
+      - name: Test frontend
+        run: npm run test:frontend
